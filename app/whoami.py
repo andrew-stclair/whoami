@@ -1,4 +1,5 @@
 """Flask version of whoami"""
+import platform
 import json
 from flask import request, Flask, Response
 
@@ -15,6 +16,7 @@ def index():
     if "X-Forwarded-For" in request.headers:
         ip = request.headers['X-Forwarded-For']
     response += f"  Ip: {ip}\n"
+    response += f"  Server: {platform.node()}"
     result = Response(response)
     result.headers['Content-Type'] = "text/plain; charset=utf-8"
     return result
@@ -28,6 +30,7 @@ def json_api():
     response['Server']['Ip'] = request.remote_addr
     if "X-Forwarded-For" in request.headers:
         response['Server']['Ip'] = request.headers['X-Forwarded-For']
+    response['Server']['Server'] = platform.node()
     result = Response(json.dumps(response, indent=2))
     result.headers['Content-Type'] = "application/json; charset=utf-8"
     return result
