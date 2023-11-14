@@ -17,6 +17,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+    
+      - name: Get variables
+        id: vars
+        run: |
+          echo "::set-output name=date::$(date +'%Y-%m')"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -39,7 +44,7 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:alpine
+            ghcr.io/${{ github.repository }}:${{ steps.vars.outputs.date }}
           pull: false
           context: .
           file: Dockerfile
