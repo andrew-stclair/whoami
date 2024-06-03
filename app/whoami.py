@@ -1,9 +1,17 @@
 """Flask version of whoami"""
 import platform
 import json
+import logging
+import sys
 from flask import request, Flask, Response
 
 app = Flask(__name__)
+if not app.debug:
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    app.logger.addHandler(handler)
 
 @app.route("/")
 def index():
